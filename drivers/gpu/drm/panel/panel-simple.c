@@ -5869,6 +5869,10 @@ static int panel_simple_dsi_probe(struct mipi_dsi_device *dsi)
 	struct panel_simple *panel;
 	int err;
 
+	panel = panel_simple_probe(&dsi->dev);
+	if (IS_ERR(panel))
+		return PTR_ERR(panel);
+
 	desc = container_of(panel->desc, struct panel_desc_dsi, desc);
 
 	if (desc == &panel_dsi) {
@@ -5884,10 +5888,6 @@ static int panel_simple_dsi_probe(struct mipi_dsi_device *dsi)
 
 		desc = dt_desc;
 	}
-
-	panel = panel_simple_probe(&dsi->dev);
-	if (IS_ERR(panel))
-		return PTR_ERR(panel);
 
 	dsi->mode_flags = desc->flags;
 	dsi->format = desc->format;
